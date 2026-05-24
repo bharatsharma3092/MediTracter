@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: meditrack
+      POSTGRES_USER: meditrack
+      POSTGRES_PASSWORD: meditrack
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    image: node:20-alpine
+    working_dir: /app/backend
+    command: sh -c "npm install && npm run dev"
+    environment:
+      PORT: 4000
+      FRONTEND_URL: http://localhost:5173
+      DATABASE_URL: postgresql://meditrack:meditrack@db:5432/meditrack
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+
+  frontend:
+    image: node:20-alpine
+    working_dir: /app/frontend
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:

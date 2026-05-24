@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  name         String
+  createdAt    DateTime      @default(now())
+  items        Item[]
+  reorderLists ReorderList[]
+  settings     UserSettings?
+}
+
+model UserSettings {
+  id                String  @id @default(cuid())
+  userId            String  @unique
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  coverMonths       Int     @default(1)
+  consumptionWindow Int     @default(30)
+  leadTimeDays      Int     @default(3)
+  bufferDays        Int     @default(2)
+  pushEnabled       Boolean @default(true)
+  emailEnabled      Boolean @default(false)
+  pushSubscription  String?
+}
+
+model Item {
+  id               String     @id @default(cuid())
+  userId           String
+  user             User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name             String
+  itemType         ItemType
+  category         String
+  unit             String
+  currentQty       Float
+  minQty           Float
+  reorderQty       Float?
+  expiryDate       DateTime?
+  dosageSchedule   String?
+  prescriptionReq  Boolean    @default(false)
+  storageCondition String?
+  assignedTo       String?
+  notes            String?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  stockLogs        StockLog[]
+  alerts           Alert[]
+
+  @@index([userId])
+  @@index([itemType])
+  @@index([expiryDate])
+}
+
+model StockLog {
+  id        String   @id @default(cuid())
+  itemId    String
+  item      Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  date      DateTime @default(now())
+  qtyChange Float
+  logType   LogType
+  notes     String?
+
+  @@index([itemId, date])
+}
+
+model ReorderList {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  generatedAt DateTime @default(now())
+  items       Json
+  status      String   @default("draft")
+}
+
+model Alert {
+  id          String    @id @default(cuid())
+  itemId      String
+  item        Item      @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  alertType   AlertType
+  triggeredAt DateTime  @default(now())
+  dismissed   Boolean   @default(false)
+
+  @@index([itemId, dismissed])
+}
+
+enum ItemType {
+  MEDICINE
+  EQUIPMENT
+}
+
+enum LogType {
+  INTAKE
+  CONSUMPTION
+  EXPIRED
+  DISCARDED
+}
+
+enum AlertType {
+  LOW_STOCK
+  EXPIRY_30
+  EXPIRY_15
+  EXPIRY_7
+  REORDER_DUE
+}

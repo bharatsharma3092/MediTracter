@@ -6,3 +6,4 @@ output
 .openclaude
 .codex
 .claude
+**/node_modules
