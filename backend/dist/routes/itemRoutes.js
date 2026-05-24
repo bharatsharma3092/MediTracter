@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.itemRoutes = void 0;
+const express_1 = require("express");
+const itemController_1 = require("../controllers/itemController");
+exports.itemRoutes = (0, express_1.Router)();
+exports.itemRoutes.get('/', itemController_1.itemController.list);
+exports.itemRoutes.post('/', itemController_1.itemController.create);
+exports.itemRoutes.post('/import-local', itemController_1.itemController.importLocal);
+exports.itemRoutes.get('/:id', itemController_1.itemController.getOne);
+exports.itemRoutes.put('/:id', itemController_1.itemController.update);
+exports.itemRoutes.delete('/:id', itemController_1.itemController.remove);
+exports.itemRoutes.get('/:id/reorder', itemController_1.itemController.reorderCalc);

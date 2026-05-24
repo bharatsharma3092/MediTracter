@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.alertRoutes = void 0;
+const express_1 = require("express");
+const alertController_1 = require("../controllers/alertController");
+exports.alertRoutes = (0, express_1.Router)();
+exports.alertRoutes.get('/', alertController_1.alertController.list);
+exports.alertRoutes.put('/dismiss-all', alertController_1.alertController.dismissAll);
+exports.alertRoutes.post('/check', alertController_1.alertController.runCheck);
+exports.alertRoutes.put('/:id/dismiss', alertController_1.alertController.dismiss);
