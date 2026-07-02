@@ -17,7 +17,7 @@ const processes = [
     name: 'frontend',
     color: '\x1b[35m',
     cwd: join(rootDir, 'frontend'),
-    args: ['run', 'dev', '--', '--host', '127.0.0.1']
+    args: ['run', 'dev', '--', '--host', '127.0.0.1', '--open']
   }
 ]
 

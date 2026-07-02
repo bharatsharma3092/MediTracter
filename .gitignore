@@ -7,3 +7,4 @@ output
 .codex
 .claude
 **/node_modules
+backend/data/
