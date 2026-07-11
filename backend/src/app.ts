@@ -13,3 +13,5 @@ app.use(express.json({ limit: '1mb' }))
 app.use('/api/v1', apiRoutes)
 app.use(notFound)
 app.use(errorHandler)
+
+export default app

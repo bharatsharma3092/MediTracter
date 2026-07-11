@@ -23,11 +23,13 @@ export function MedicineAutocomplete({
   name,
   defaultValue,
   required,
+  clearOnSelect,
   onSelect
 }: {
   name: string
   defaultValue?: string
   required?: boolean
+  clearOnSelect?: boolean
   onSelect?: (medicine: Medicine) => void
 }) {
   const [query, setQuery] = useState(defaultValue ?? '')
@@ -122,8 +124,14 @@ export function MedicineAutocomplete({
   }, [])
 
   function select(medicine: Medicine) {
-    setQuery(medicine.name)
+    if (clearOnSelect) {
+      setQuery('')
+      setResults([])
+    } else {
+      setQuery(medicine.name)
+    }
     setIsOpen(false)
+    setHighlightIndex(-1)
     onSelect?.(medicine)
   }
 

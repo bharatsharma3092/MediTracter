@@ -3,13 +3,18 @@ import { Link } from 'react-router-dom'
 import DashboardPage from './DashboardPage'
 import { Button } from '@/components/common/Button'
 import { ImportBackupModal } from '@/components/inventory/ImportBackupModal'
+import { QuickListModal } from '@/components/inventory/QuickListModal'
 
 export default function InventoryPage() {
   const [isImportOpen, setIsImportOpen] = useState(false)
+  const [isQuickListOpen, setIsQuickListOpen] = useState(false)
 
   return (
     <div className="grid gap-5">
       <div className="flex justify-end gap-3">
+        <Button variant="secondary" onClick={() => setIsQuickListOpen(true)}>
+          Quick list
+        </Button>
         <Button variant="secondary" onClick={() => setIsImportOpen(true)}>
           Import Backup
         </Button>
@@ -19,6 +24,7 @@ export default function InventoryPage() {
       </div>
       <DashboardPage />
       <ImportBackupModal open={isImportOpen} onClose={() => setIsImportOpen(false)} />
+      {isQuickListOpen && <QuickListModal open onClose={() => setIsQuickListOpen(false)} />}
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
-import { FullInventoryRow, ReorderListItem } from '@shared/types'
+import { FullInventoryRow, QuickListRow, ReorderListItem } from '@shared/types'
 import { formatDate } from './dateUtils'
 
 function title(doc: jsPDF, label: string) {
@@ -48,4 +48,15 @@ export function exportInventoryPDF(items: FullInventoryRow[]) {
     ])
   })
   doc.save('meditrack-inventory.pdf')
+}
+
+export function exportQuickListPDF(rows: QuickListRow[], label = 'Quick Needs List') {
+  const doc = new jsPDF()
+  title(doc, `MediTrack Pro ${label}`)
+  autoTable(doc, {
+    startY: 34,
+    head: [['Medicine', 'Category', 'Quantity', 'Unit']],
+    body: rows.map((row) => [row.name, row.category, row.requestedQty, row.unit])
+  })
+  doc.save('meditrack-quick-list.pdf')
 }

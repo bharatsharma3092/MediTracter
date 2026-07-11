@@ -17,3 +17,4 @@ exports.app.use(express_1.default.json({ limit: '1mb' }));
 exports.app.use('/api/v1', routes_1.apiRoutes);
 exports.app.use(errorHandler_1.notFound);
 exports.app.use(errorHandler_1.errorHandler);
+exports.default = exports.app;
